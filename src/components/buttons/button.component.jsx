@@ -1,7 +1,8 @@
 import React from "react";
 import "./button.styles.scss";
+import { ReactComponent as GoogleIcon } from "../../assets/icons8-google.svg";
 
-function Button({ children, googleSignInButton_true, ...otherProps }) {
+function Button({ children, googleSignInButton_true, img, ...otherProps }) {
   return (
     <button
       className={`custom-button ${
@@ -9,6 +10,16 @@ function Button({ children, googleSignInButton_true, ...otherProps }) {
       }`}
       {...otherProps}
     >
+      {googleSignInButton_true ? (
+        <GoogleIcon
+          style={{
+            width: "30px",
+            height: "20px",
+            float: "left",
+            marginLeft: "-10px",
+          }}
+        />
+      ) : null}
       {children}
     </button>
   );
