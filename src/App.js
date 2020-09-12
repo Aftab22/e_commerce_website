@@ -4,6 +4,7 @@ import Homepage from "./pages/homepage/homepage.component";
 import ShopPage from "./pages/shop/shop.component";
 import Header from "./components/header/header.component";
 import SignInSignUp from "./pages/sign-in-sign-up/sign-in-sign-up.component";
+import { withRouter } from "react-router-dom";
 
 //auth
 import { auth } from "./firebase/firebase.utils";
@@ -24,7 +25,9 @@ class App extends React.Component {
     //we subscribe to this method , we always listen to it for sign in changes
     // user is the user detaisl that firebase stores in indexed db after successful sign in
     this.unSubscribeFromGoogleAuth = auth.onAuthStateChanged((user) => {
-      this.setState({ currentUser: user });
+      this.setState({ currentUser: user }, () =>
+        user ? this.props.history.push("/") : this.props.history.push("/signin")
+      );
     });
     //^ auth.onAuthStateChanged() does get exectuted and listening starts.
   }
@@ -49,4 +52,4 @@ class App extends React.Component {
   }
 }
 
-export default App;
+export default withRouter(App);
