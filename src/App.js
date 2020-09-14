@@ -7,7 +7,7 @@ import SignInSignUp from "./pages/sign-in-sign-up/sign-in-sign-up.component";
 import { withRouter } from "react-router-dom";
 
 //auth
-import { auth } from "./firebase/firebase.utils";
+import { auth, createUserProfileDocument } from "./firebase/firebase.utils";
 
 import "./App.css";
 
@@ -22,14 +22,32 @@ class App extends React.Component {
   unSubscribeFromGoogleAuth = null;
 
   componentDidMount() {
-    //we subscribe to this method , we always listen to it for sign in changes
-    // user is the user detaisl that firebase stores in indexed db after successful sign in
-    this.unSubscribeFromGoogleAuth = auth.onAuthStateChanged((user) => {
-      this.setState({ currentUser: user }, () =>
-        user ? this.props.history.push("/") : this.props.history.push("/signin")
-      );
-    });
-    //^ auth.onAuthStateChanged() does get exectuted and listening starts.
+    //we subscribe to this method onAuthStateChanged, we always listen to it for sign in/sign out changes
+    // "userAuth" is the user datails object that firebase stores in indexed db after successful sign in
+    this.unSubscribeFromGoogleAuth = auth.onAuthStateChanged(
+      async (userAuth) => {
+        if (userAuth) {
+          //on successfull google sign in , we get "userAuth" object and pass it to get stored in "db"
+          //on succsfulll db entry we recieve a userRef object with user details stored in db.
+          const userRef = await createUserProfileDocument(userAuth);
+          userRef.onSnapshot((snapshot) => {
+            this.setState(
+              {
+                currentUser: {
+                  id: snapshot.id,
+                  ...snapshot.data(),
+                },
+              },
+              () => this.props.history.push("/")
+            );
+          });
+        } else {
+          this.setState({ currentUser: null }, () =>
+            this.props.history.push("/signin")
+          );
+        }
+      }
+    );
   }
 
   //as soon as component mounts , we listen for auth state changes
