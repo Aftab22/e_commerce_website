@@ -33,6 +33,7 @@ class App extends React.Component {
               id: snapshot.id,
               ...snapshot.data(),
             });
+            this.props.history.push("/");
           });
         } else {
           setCurrentUser(userAuth);
