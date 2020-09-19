@@ -5,23 +5,20 @@ import ShopPage from "./pages/shop/shop.component";
 import Header from "./components/header/header.component";
 import SignInSignUp from "./pages/sign-in-sign-up/sign-in-sign-up.component";
 import { withRouter } from "react-router-dom";
-
+//redux-step-9 import action you want to trigger in the component
+import { connect } from "react-redux";
+import { setCurrentUser } from "./redux/user/user.actions";
 //auth
 import { auth, createUserProfileDocument } from "./firebase/firebase.utils";
 
 import "./App.css";
 
 class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      currentUser: null,
-    };
-  }
-
   unSubscribeFromGoogleAuth = null;
 
   componentDidMount() {
+    const { setCurrentUser } = this.props;
+
     //we subscribe to this method onAuthStateChanged, we always listen to it for sign in/sign out changes
     // "userAuth" is the user datails object that firebase stores in indexed db after successful sign in
     this.unSubscribeFromGoogleAuth = auth.onAuthStateChanged(
@@ -31,20 +28,16 @@ class App extends React.Component {
           //on succsfulll db entry we recieve a userRef object with user details stored in db.
           const userRef = await createUserProfileDocument(userAuth);
           userRef.onSnapshot((snapshot) => {
-            this.setState(
-              {
-                currentUser: {
-                  id: snapshot.id,
-                  ...snapshot.data(),
-                },
-              },
-              () => this.props.history.push("/")
-            );
+            //redux-step-12 call/dispatch/trigger action with param
+            setCurrentUser({
+              id: snapshot.id,
+              ...snapshot.data(),
+            });
+            this.props.history.push("/");
           });
         } else {
-          this.setState({ currentUser: null }, () =>
-            this.props.history.push("/signin")
-          );
+          setCurrentUser(userAuth);
+          this.props.history.push("/signin");
         }
       }
     );
@@ -59,7 +52,7 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <Header currentUser={this.state.currentUser} />
+        <Header />
         <Switch>
           <Route exact path="/" component={Homepage} />
           <Route path="/shop" component={ShopPage} />
@@ -70,4 +63,10 @@ class App extends React.Component {
   }
 }
 
-export default withRouter(App);
+const mapStateToProps = null;
+//redux-step-10 create mapDispatchToProps pass actions to component
+const mapDispatchToProps = (dispatch) => ({
+  setCurrentUser: (user) => dispatch(setCurrentUser(user)),
+});
+//redux-step-11 pass mapStateToProps and  mapDispatchToProps to connectHOC
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(App));
