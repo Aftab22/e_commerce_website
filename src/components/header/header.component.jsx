@@ -6,6 +6,7 @@ import { auth } from "../../firebase/firebase.utils";
 //redux-step-7.1 add redux to component
 //connect is a HOC that modifies our component with access to store and redux stuff
 import { connect } from "react-redux";
+import CartIcon from "../cart-icon/cart-icon.component";
 import "./header.styles.scss";
 
 function Header({ currentUser }) {
@@ -31,6 +32,7 @@ function Header({ currentUser }) {
             SIGN IN
           </Link>
         )}
+        <CartIcon />
       </div>
     </div>
   );
