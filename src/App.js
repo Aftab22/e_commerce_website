@@ -5,7 +5,7 @@ import ShopPage from "./pages/shop/shop.component";
 import Header from "./components/header/header.component";
 import SignInSignUp from "./pages/sign-in-sign-up/sign-in-sign-up.component";
 import { withRouter } from "react-router-dom";
-//redux-step-9 import action you want to trigger in the component
+//redux-step-8.1 import action you want to trigger in the component
 import { connect } from "react-redux";
 import { setCurrentUser } from "./redux/user/user.actions";
 //auth
@@ -64,9 +64,9 @@ class App extends React.Component {
 }
 
 const mapStateToProps = null;
-//redux-step-10 create mapDispatchToProps pass actions to component
+//redux-step-8.2 create mapDispatchToProps pass actions to component
 const mapDispatchToProps = (dispatch) => ({
   setCurrentUser: (user) => dispatch(setCurrentUser(user)),
 });
-//redux-step-11 pass mapStateToProps and  mapDispatchToProps to connectHOC
+//redux-step-8.3 pass mapStateToProps and  mapDispatchToProps to connectHOC
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(App));
