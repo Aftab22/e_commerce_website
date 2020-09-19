@@ -7,9 +7,10 @@ import { auth } from "../../firebase/firebase.utils";
 //connect is a HOC that modifies our component with access to store and redux stuff
 import { connect } from "react-redux";
 import CartIcon from "../cart-icon/cart-icon.component";
+import Cart from "../cart-dropdown/cart-dropdown.component";
 import "./header.styles.scss";
 
-function Header({ currentUser }) {
+function Header({ currentUser, cartHidden }) {
   return (
     <div className="header">
       <Link to="/" className="logo-container">
@@ -34,6 +35,7 @@ function Header({ currentUser }) {
         )}
         <CartIcon />
       </div>
+      {!cartHidden ? <Cart /> : null}
     </div>
   );
 }
@@ -41,8 +43,9 @@ function Header({ currentUser }) {
 //redux-step-7.2 connect component to root-reducer
 //mapStateToProps allows us to access the store i.e root-reducer i.e global state
 //root-reducer has a property "user" which has reducer. that reducer has a property current user
-const mapStateToProps = (state) => ({
-  currentUser: state.user.currentUser,
+const mapStateToProps = ({ user: { currentUser }, cart: { cartHidden } }) => ({
+  currentUser,
+  cartHidden,
 });
 
 //redux-step-7.3 using connect by passing mapStateToProps and Component
