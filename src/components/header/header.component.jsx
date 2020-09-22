@@ -8,6 +8,10 @@ import { auth } from "../../firebase/firebase.utils";
 import { connect } from "react-redux";
 import CartIcon from "../cart-icon/cart-icon.component";
 import Cart from "../cart-dropdown/cart-dropdown.component";
+import { createStructuredSelector } from "reselect";
+import { selectCartHidden } from "../../redux/cart/cart.selectors";
+import { selectCurrentUser } from "../../redux/user/user.selector";
+
 import "./header.styles.scss";
 
 function Header({ currentUser, cartHidden }) {
@@ -43,9 +47,23 @@ function Header({ currentUser, cartHidden }) {
 //redux-step-7.2 connect component to root-reducer
 //mapStateToProps allows us to access the store i.e root-reducer i.e global state
 //root-reducer has a property "user" which has reducer. that reducer has a property current user
-const mapStateToProps = ({ user: { currentUser }, cart: { cartHidden } }) => ({
-  currentUser,
-  cartHidden,
+
+// without selectors
+// const mapStateToProps = ({ user: { currentUser }, cart: { cartHidden } }) => ({
+//   currentUser,
+//   cartHidden,
+// });
+
+//With using plain selectors
+// const mapStateToProps = (state) => ({
+//   currentUser: selectCurrentUser(state),
+//   cartHidden: selectCartHidden(state),
+// });
+
+//using structured selector - less verbose
+const mapStateToProps = createStructuredSelector({
+  currentUser: selectCurrentUser,
+  cartHidden: selectCartHidden,
 });
 
 //redux-step-7.3 using connect by passing mapStateToProps and Component
