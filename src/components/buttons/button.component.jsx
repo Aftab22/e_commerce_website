@@ -2,10 +2,16 @@ import React from "react";
 import "./button.styles.scss";
 import { ReactComponent as GoogleIcon } from "../../assets/icons8-google.svg";
 
-function Button({ children, googleSignInButton_true, img, ...otherProps }) {
+function Button({
+  children,
+  googleSignInButton_true,
+  img,
+  inverted,
+  ...otherProps
+}) {
   return (
     <button
-      className={`custom-button ${
+      className={`custom-button ${inverted ? " inverted " : ""} ${
         googleSignInButton_true ? "google-sign-in" : ""
       }`}
       {...otherProps}
