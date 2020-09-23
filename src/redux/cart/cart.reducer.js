@@ -1,5 +1,5 @@
 import { CartActionTypes } from "./cart.types";
-import { preventDuplicates } from "./cart.utils";
+import { preventDuplicates, decreaseItemCount } from "./cart.utils";
 
 const INITIAL_STATE = {
   cartHidden: true,
@@ -24,6 +24,11 @@ const cartReducer = (state = INITIAL_STATE, action) => {
         cartItems: state.cartItems.filter(
           (cartItem) => cartItem.id !== action.payload.id
         ),
+      };
+    case CartActionTypes.DECREASE_ITEM_COUNT:
+      return {
+        ...state,
+        cartItems: decreaseItemCount(state.cartItems, action.payload),
       };
     default:
       return state;
