@@ -4,6 +4,7 @@ import Homepage from "./pages/homepage/homepage.component";
 import ShopPage from "./pages/shop/shop.component";
 import Header from "./components/header/header.component";
 import SignInSignUp from "./pages/sign-in-sign-up/sign-in-sign-up.component";
+import CheckoutPage from "./pages/checkout/checkout.component";
 import { withRouter } from "react-router-dom";
 //redux-step-8.1 import action you want to trigger in the component
 import { connect } from "react-redux";
@@ -33,7 +34,6 @@ class App extends React.Component {
               id: snapshot.id,
               ...snapshot.data(),
             });
-            this.props.history.push("/");
           });
         } else {
           setCurrentUser(userAuth);
@@ -56,6 +56,7 @@ class App extends React.Component {
         <Switch>
           <Route exact path="/" component={Homepage} />
           <Route path="/shop" component={ShopPage} />
+          <Route path="/checkout" component={CheckoutPage} />
           {/*do not allow user to go on sign in page if already signed in*/}
           <Route
             exact
