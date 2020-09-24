@@ -26,7 +26,7 @@ function CheckoutItem({ cartItem, removeItem, addItem, decreaseItem }) {
       </span>
       <span className="price">{price}</span>
       <div className="remove-button" onClick={() => removeItem(cartItem)}>
-        &#10060;
+        <span role="img">&#10060;</span>
       </div>
     </div>
   );
